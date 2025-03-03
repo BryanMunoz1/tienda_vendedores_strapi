@@ -26,6 +26,12 @@
       "type": "email",
       "required": true,
       "unique": true
+    },
+    "vendedore": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::vendedore.vendedore",
+      "inversedBy": "tiendas"
     }
   }
 }

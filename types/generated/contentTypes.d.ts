@@ -399,12 +399,17 @@ export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    vendedore: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::vendedore.vendedore'
+    >;
   };
 }
 
 export interface ApiVendedoreVendedore extends Struct.CollectionTypeSchema {
   collectionName: 'vendedores';
   info: {
+    description: '';
     displayName: 'Vendedores';
     pluralName: 'vendedores';
     singularName: 'vendedore';
@@ -426,6 +431,7 @@ export interface ApiVendedoreVendedore extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     nombre: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    tiendas: Schema.Attribute.Relation<'oneToMany', 'api::tienda.tienda'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

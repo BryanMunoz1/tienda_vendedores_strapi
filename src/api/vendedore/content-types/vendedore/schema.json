@@ -4,7 +4,8 @@
   "info": {
     "singularName": "vendedore",
     "pluralName": "vendedores",
-    "displayName": "Vendedores"
+    "displayName": "Vendedores",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -21,6 +22,12 @@
     "fecha_contratacion": {
       "type": "date",
       "required": true
+    },
+    "tiendas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tienda.tienda",
+      "mappedBy": "vendedore"
     }
   }
 }
