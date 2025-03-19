@@ -372,6 +372,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
   collectionName: 'tiendas';
   info: {
+    description: '';
     displayName: 'Tiendas';
     pluralName: 'tiendas';
     singularName: 'tienda';
@@ -380,9 +381,7 @@ export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    correo_electronico: Schema.Attribute.Email &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+    correo_electronico: Schema.Attribute.Email & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -399,8 +398,8 @@ export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    vendedore: Schema.Attribute.Relation<
-      'manyToOne',
+    vendedores: Schema.Attribute.Relation<
+      'oneToMany',
       'api::vendedore.vendedore'
     >;
   };
@@ -431,7 +430,7 @@ export interface ApiVendedoreVendedore extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     nombre: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    tiendas: Schema.Attribute.Relation<'oneToMany', 'api::tienda.tienda'>;
+    tienda: Schema.Attribute.Relation<'manyToOne', 'api::tienda.tienda'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

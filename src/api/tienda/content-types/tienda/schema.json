@@ -4,7 +4,8 @@
   "info": {
     "singularName": "tienda",
     "pluralName": "tiendas",
-    "displayName": "Tiendas"
+    "displayName": "Tiendas",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -24,14 +25,13 @@
     },
     "correo_electronico": {
       "type": "email",
-      "required": true,
-      "unique": true
+      "required": true
     },
-    "vendedore": {
+    "vendedores": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "oneToMany",
       "target": "api::vendedore.vendedore",
-      "inversedBy": "tiendas"
+      "mappedBy": "tienda"
     }
   }
 }

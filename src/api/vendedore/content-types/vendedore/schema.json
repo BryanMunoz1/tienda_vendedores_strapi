@@ -23,11 +23,11 @@
       "type": "date",
       "required": true
     },
-    "tiendas": {
+    "tienda": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToOne",
       "target": "api::tienda.tienda",
-      "mappedBy": "vendedore"
+      "inversedBy": "vendedores"
     }
   }
 }
