@@ -5,11 +5,12 @@
     "singularName": "vendedore",
     "pluralName": "vendedores",
     "displayName": "Vendedores",
-    "description": ""
+    "description": "Vendedores asociados a tiendas"
   },
   "options": {
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "nombre": {
       "type": "string",

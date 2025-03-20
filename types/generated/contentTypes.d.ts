@@ -372,7 +372,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
   collectionName: 'tiendas';
   info: {
-    description: '';
+    description: 'Colecci\u00F3n de tiendas con sus vendedores asociados';
     displayName: 'Tiendas';
     pluralName: 'tiendas';
     singularName: 'tienda';
@@ -386,6 +386,8 @@ export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     direccion: Schema.Attribute.String & Schema.Attribute.Required;
+    estado: Schema.Attribute.Enumeration<['activa', 'inactiva', 'incompleta']> &
+      Schema.Attribute.DefaultTo<'activa'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -394,7 +396,7 @@ export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     nombre: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    telefono: Schema.Attribute.Integer & Schema.Attribute.Required;
+    telefono: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -408,7 +410,7 @@ export interface ApiTiendaTienda extends Struct.CollectionTypeSchema {
 export interface ApiVendedoreVendedore extends Struct.CollectionTypeSchema {
   collectionName: 'vendedores';
   info: {
-    description: '';
+    description: 'Vendedores asociados a tiendas';
     displayName: 'Vendedores';
     pluralName: 'vendedores';
     singularName: 'vendedore';

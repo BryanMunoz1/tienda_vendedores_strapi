@@ -5,11 +5,12 @@
     "singularName": "tienda",
     "pluralName": "tiendas",
     "displayName": "Tiendas",
-    "description": ""
+    "description": "Colección de tiendas con sus vendedores asociados"
   },
   "options": {
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "nombre": {
       "type": "string",
@@ -20,12 +21,17 @@
       "required": true
     },
     "telefono": {
-      "type": "integer",
+      "type": "string",
       "required": true
     },
     "correo_electronico": {
       "type": "email",
       "required": true
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": ["activa", "inactiva", "incompleta"],
+      "default": "activa"
     },
     "vendedores": {
       "type": "relation",
