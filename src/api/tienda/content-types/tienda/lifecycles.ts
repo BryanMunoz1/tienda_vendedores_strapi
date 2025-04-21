@@ -1,9 +1,8 @@
 module.exports = {
   beforeCreate: async (event) => {
-    // No podemos validar completamente en beforeCreate, pero podemos hacer validaciones básicas
+    // Validaciones básicas
     const { data } = event.params;
     
-    // Verificamos que el teléfono sea una cadena de texto válida
     if (data.telefono && typeof data.telefono !== 'string') {
       data.telefono = String(data.telefono);
     }
@@ -12,24 +11,20 @@ module.exports = {
   beforeUpdate: async (event) => {
     const { data, where } = event.params;
     
-    // Verificamos que el teléfono sea una cadena de texto válida
     if (data.telefono && typeof data.telefono !== 'string') {
       data.telefono = String(data.telefono);
     }
     
-    // Solo si está actualizando la relación con vendedores
+    // Solo validar vendedores si se está actualizando esa relación
     if (data.vendedores !== undefined) {
-      // Obtener la tienda actual con sus vendedores para compararla
       try {
-        const currentStore = await strapi.entityService.findOne('api::tienda.tienda', where.id, {
-          populate: {
-            vendedores: true
-          }
+        // Consulta más eficiente que solo recupera el ID de los vendedores
+        const currentStore = await strapi.db.query('api::tienda.tienda').findOne({
+          where: { id: where.id },
+          populate: { vendedores: { select: ['id'] } },
         });
         
-        // Verificar si currentStore existe y si tiene la propiedad vendedores
-        const currentVendedores = currentStore && 'vendedores' in currentStore ? 
-          (currentStore as any).vendedores : [];
+        const currentVendedores = currentStore && currentStore.vendedores || [];
         
         const isEmptyingVendedores = 
           (!data.vendedores || data.vendedores.length === 0) && 
@@ -42,7 +37,6 @@ module.exports = {
         if (error instanceof Error && error.message.includes('Una tienda debe tener')) {
           throw error;
         }
-        // Otros errores podrían ser problemas de DB, así que procedemos con cautela
         console.error('Error al validar vendedores:', error);
       }
     }
@@ -52,29 +46,22 @@ module.exports = {
     const { result } = event;
     
     try {
-      // Verificar después de la creación que tenga al menos un vendedor
-      const tiendaWithVendedores = await strapi.entityService.findOne('api::tienda.tienda', result.id, {
-        populate: {
-          vendedores: true
-        }
+      // Consulta optimizada
+      const tiendaWithVendedores = await strapi.db.query('api::tienda.tienda').findOne({
+        where: { id: result.id },
+        populate: { vendedores: { select: ['id'] } },
       });
       
-      // Usar TypeScript casting para acceder a la propiedad vendedores
-      const tiendaData = tiendaWithVendedores as any;
-      
-      // Verificación segura de la existencia de vendedores
       const hasVendedores = 
-        tiendaData && 
-        tiendaData.vendedores && 
-        Array.isArray(tiendaData.vendedores) && 
-        tiendaData.vendedores.length > 0;
+        tiendaWithVendedores && 
+        tiendaWithVendedores.vendedores && 
+        Array.isArray(tiendaWithVendedores.vendedores) && 
+        tiendaWithVendedores.vendedores.length > 0;
       
       if (!hasVendedores) {
-        // Actualizar el estado de la tienda a 'incompleta'
-        await strapi.entityService.update('api::tienda.tienda', result.id, {
-          data: {
-            estado: 'incompleta'
-          }
+        await strapi.db.query('api::tienda.tienda').update({
+          where: { id: result.id },
+          data: { estado: 'incompleta' }
         });
         console.warn(`Advertencia: La tienda ${result.id} se creó sin vendedores asignados.`);
       }
